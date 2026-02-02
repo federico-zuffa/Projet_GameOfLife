@@ -27,7 +27,7 @@
 Federico Zuffa
 16.01.2026
 Classe Passerelle
-Projet Game of Life
+Projet Game of Life V1
 
 */
 using System;
@@ -45,6 +45,11 @@ namespace Projet_GameOfLife
 {
     public partial class Frm_GameOfLife : Form
     {
+        private const int WINDOW_WIDTH = 1200;
+        private const int WINDOW_HEIGHT = 900;
+        private const int WINDOW_MARGIN = 10;
+
+
         private Grid _grid;
         private int _lastRow = -1;
         private int _lastCol = -1;
@@ -62,7 +67,12 @@ namespace Projet_GameOfLife
 
         private void Frm_GameOfLife_Load(object sender, EventArgs e)
         {
-            Grid = new Grid(100, 200, 20); //100 row, 100 col, cell de 20px
+            Grid = new Grid(10, 20); //100 row, 100 col, cell de 20px
+            pictureBox1.Width = WINDOW_WIDTH - WINDOW_MARGIN;
+            pictureBox1.Height = WINDOW_HEIGHT - WINDOW_MARGIN;
+
+            Grid.CellSize = Math.Min(pictureBox1.Width / Grid.NbColumn, pictureBox1.Height / Grid.NbRow);
+
             Grid.InitializeBitMap(pictureBox1.Width, pictureBox1.Height);
 
             //TEST Planneur
@@ -175,6 +185,5 @@ namespace Projet_GameOfLife
         {
 
         }
-
     }
 }

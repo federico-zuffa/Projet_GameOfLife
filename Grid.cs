@@ -27,12 +27,13 @@
 Federico Zuffa
 16.01.2026
 Classe Passerelle
-Projet Game of Life
+Projet Game of Life V1
 
 */
 using System;
 using System.Drawing;
 using System.Net;
+using System.Windows.Forms;
 
 namespace Projet_GameOfLife
 {
@@ -69,13 +70,13 @@ namespace Projet_GameOfLife
 
         //Constructeurs
 
-        public Grid(int nbRow, int nbColumn, int cellSize)
+        public Grid(int nbRow, int nbColumn)
         {
             this.NbRow = nbRow;
             this.NbColumn = nbColumn;
             this.Cells = new bool[nbRow, nbColumn];
             this.NextCells = new bool[nbRow, nbColumn];
-            this.CellSize = cellSize;
+            //cellSize ?
             //this.Width = width;
             //this.Height = height;
         }
@@ -168,8 +169,7 @@ namespace Projet_GameOfLife
             this.Bitmap = new Bitmap(width, height);
             this.Graphics = Graphics.FromImage(this.Bitmap);
 
-            this.CellWidth = width / NbColumn;
-            this.CellHeight = height / NbRow;
+        
         }
 
         public void DrawGrid()
@@ -182,12 +182,12 @@ namespace Projet_GameOfLife
 
             for (int i = 0; i < NbRow; i++)
             {
-                dy = i * CellHeight;
+                dy = i * CellSize;
                 Graphics.DrawLine(gridPen, 0, dy, Bitmap.Width, dy);
             }
             for (int j = 0; j < NbColumn; j++)
             {
-                dx = j * CellWidth;
+                dx = j * CellSize;
                 Graphics.DrawLine(gridPen, dx, 0, dx, Bitmap.Height);
             }
         }
@@ -205,10 +205,10 @@ namespace Projet_GameOfLife
                 {
                     if (Cells[i, j])
                     {
-                        dx = j * CellWidth;
-                        dy = i * CellHeight;
+                        dx = j * CellSize;
+                        dy = i * CellSize;
 
-                        Graphics.FillRectangle(aliveBrush, dx + 1, dy + 1, CellWidth - 1, CellHeight - 1);
+                        Graphics.FillRectangle(aliveBrush, dx + 1, dy + 1, CellSize - 1, CellSize - 1);
                     }
                 }
             }
@@ -228,8 +228,8 @@ namespace Projet_GameOfLife
 
         public bool IsCellInGrid(int x, int y)
         {
-            int col = x / CellWidth;
-            int row = y / CellHeight;
+            int col = x / CellSize;
+            int row = y / CellSize;
 
             if (col < 0 || col >= NbColumn || row < 0 || row >= NbRow)
             {
@@ -242,8 +242,8 @@ namespace Projet_GameOfLife
         {
             int[] cellCoord = new int[2];
 
-            int row = y / CellHeight;
-            int col = x / CellWidth;
+            int row = y / CellSize;
+            int col = x / CellSize;
 
             if (IsCellInGrid(x, y))
             {
