@@ -27,7 +27,7 @@
 Federico Zuffa
 16.01.2026
 Classe Passerelle
-Projet Game of Life
+Projet Game of Life V1
 
 */
 using System;
@@ -202,6 +202,5 @@ namespace Projet_GameOfLife
             pictureBox1.Refresh();
             //insérer le trckbar.value pour modifier en temps réel
         }
-
     }
 }

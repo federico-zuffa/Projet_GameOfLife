@@ -27,12 +27,13 @@
 Federico Zuffa
 16.01.2026
 Classe Passerelle
-Projet Game of Life
+Projet Game of Life V1
 
 */
 using System;
 using System.Drawing;
 using System.Net;
+using System.Windows.Forms;
 
 namespace Projet_GameOfLife
 {
