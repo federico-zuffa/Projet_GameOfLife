@@ -48,8 +48,6 @@ namespace Projet_GameOfLife
         private int _width;
         private int _height;
         private int _cellSize;
-        private int _cellWidth;
-        private int _cellHeight;
         private Bitmap _bitmap;
         private Graphics _graphics;
 
@@ -61,8 +59,6 @@ namespace Projet_GameOfLife
         public bool[,] NextCells { get; }
         public int Width { get => _width; set => _width = value; }
         public int Height { get => _height; set => _height = value; }
-        public int CellWidth { get => _cellWidth; set => _cellWidth = value; }
-        public int CellHeight { get => _cellHeight; set => _cellHeight = value; }
         public Bitmap Bitmap { get => _bitmap; set => _bitmap = value; }
         public Graphics Graphics { get => _graphics; set => _graphics = value; }
         public int CellSize { get => _cellSize; set => _cellSize = value; }
@@ -75,9 +71,7 @@ namespace Projet_GameOfLife
             this.NbColumn = nbColumn;
             this.Cells = new bool[nbRow, nbColumn];
             this.NextCells = new bool[nbRow, nbColumn];
-            this.CellSize = cellSize;
-            //this.Width = width;
-            //this.Height = height;
+            //cellSize ?
         }
 
         //Méthodes
@@ -167,9 +161,6 @@ namespace Projet_GameOfLife
         {
             this.Bitmap = new Bitmap(width, height);
             this.Graphics = Graphics.FromImage(this.Bitmap);
-
-            this.CellWidth = width / NbColumn;
-            this.CellHeight = height / NbRow;
         }
 
         public void DrawGrid()
@@ -180,14 +171,14 @@ namespace Projet_GameOfLife
             int dy = 0;
             int dx = 0;
 
-            for (int i = 0; i < NbRow; i++)
+            for (int i = 0; i <= NbRow; i++)
             {
-                dy = i * CellHeight;
+                dy = i * CellSize;
                 Graphics.DrawLine(gridPen, 0, dy, Bitmap.Width, dy);
             }
-            for (int j = 0; j < NbColumn; j++)
+            for (int j = 0; j <= NbColumn; j++)
             {
-                dx = j * CellWidth;
+                dx = j * CellSize;
                 Graphics.DrawLine(gridPen, dx, 0, dx, Bitmap.Height);
             }
         }
@@ -205,10 +196,10 @@ namespace Projet_GameOfLife
                 {
                     if (Cells[i, j])
                     {
-                        dx = j * CellWidth;
-                        dy = i * CellHeight;
+                        dx = j * CellSize;
+                        dy = i * CellSize;
 
-                        Graphics.FillRectangle(aliveBrush, dx + 1, dy + 1, CellWidth - 1, CellHeight - 1);
+                        Graphics.FillRectangle(aliveBrush, dx + 1, dy + 1, CellSize - 1, CellSize - 1);
                     }
                 }
             }
@@ -228,8 +219,8 @@ namespace Projet_GameOfLife
 
         public bool IsCellInGrid(int x, int y)
         {
-            int col = x / CellWidth;
-            int row = y / CellHeight;
+            int col = x / CellSize;
+            int row = y / CellSize;
 
             if (col < 0 || col >= NbColumn || row < 0 || row >= NbRow)
             {
@@ -242,8 +233,8 @@ namespace Projet_GameOfLife
         {
             int[] cellCoord = new int[2];
 
-            int row = y / CellHeight;
-            int col = x / CellWidth;
+            int row = y / CellSize;
+            int col = x / CellSize;
 
             if (IsCellInGrid(x, y))
             {

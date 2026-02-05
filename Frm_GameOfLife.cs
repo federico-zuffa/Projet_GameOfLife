@@ -45,24 +45,42 @@ namespace Projet_GameOfLife
 {
     public partial class Frm_GameOfLife : Form
     {
+        private const int WINDOW_WIDTH = 1000;
+        private const int WINDOW_HEIGHT = 800;
+        private const int WINDOW_MARGIN = 200;
+        
+
+
         private Grid _grid;
         private int _lastRow = -1;
         private int _lastCol = -1;
         private bool _isMouseDown = false;
+        private int _speedInterval;
         internal Grid Grid { get => _grid; set => _grid = value; }
         public int LastRow { get => _lastRow; set => _lastRow = value; }
         public int LastCol { get => _lastCol; set => _lastCol = value; }
         public bool IsMouseDown { get => _isMouseDown; set => _isMouseDown = value; }
+        public int SpeedInterval { get => _speedInterval; set => _speedInterval = value; }
 
         public Frm_GameOfLife()
         {
             InitializeComponent();
+            SpeedInterval = 500;
         }
 
 
         private void Frm_GameOfLife_Load(object sender, EventArgs e)
         {
-            Grid = new Grid(100, 200, 20); //100 row, 100 col, cell de 20px
+            Grid = new Grid(10, 20); //100 row, 100 col
+
+            SpeedInterval = trckBr_Speed.Value;
+            timer1.Interval = SpeedInterval; //1 seconde de base
+            pictureBox1.Width = WINDOW_WIDTH - WINDOW_MARGIN;
+            pictureBox1.Height = WINDOW_HEIGHT - WINDOW_MARGIN;
+            this.Size = new Size(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+            Grid.CellSize = Math.Min((int)(pictureBox1.Width / Grid.NbColumn), (int)(pictureBox1.Height / Grid.NbRow));
+
             Grid.InitializeBitMap(pictureBox1.Width, pictureBox1.Height);
 
             //TEST Planneur
@@ -117,13 +135,6 @@ namespace Projet_GameOfLife
             pictureBox1.Refresh();
         }
 
-        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
-        {
-            Grid.ToggleFromPixel(e.X, e.Y);
-            Grid.Display();
-            pictureBox1.Refresh();
-        }
-
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             IsMouseDown = true;
@@ -173,7 +184,23 @@ namespace Projet_GameOfLife
 
         private void btn_START_Click(object sender, EventArgs e)
         {
+            if (btn_START.Text == "START")
+            {
+                timer1.Start();
+                btn_START.Text = "STOP";
+            }
+            else { 
+                timer1.Stop();
+                btn_START.Text = "START";
+            }
+        }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Grid.Step(new Rules());
+            Grid.Display();
+            pictureBox1.Refresh();
+            //insérer le trckbar.value pour modifier en temps réel
         }
 
     }
