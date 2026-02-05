@@ -73,6 +73,8 @@ namespace Projet_GameOfLife
         {
             Grid = new Grid(10, 20); //100 row, 100 col
 
+            // TEST TEST TEST TEST TEST 
+
             SpeedInterval = trckBr_Speed.Value;
             timer1.Interval = SpeedInterval; //1 seconde de base
             pictureBox1.Width = WINDOW_WIDTH - WINDOW_MARGIN;
