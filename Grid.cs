@@ -65,7 +65,7 @@ namespace Projet_GameOfLife
 
         //Constructeurs
 
-        public Grid(int nbRow, int nbColumn, int cellSize)
+        public Grid(int nbRow, int nbColumn)
         {
             this.NbRow = nbRow;
             this.NbColumn = nbColumn;
