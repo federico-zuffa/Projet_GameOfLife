@@ -73,7 +73,7 @@ namespace Projet_GameOfLife
         {
             Grid = new Grid(10, 20); //100 row, 100 col
 
-            // TEST TEST TEST TEST TEST 
+            // TEST TEST TEST TEST TEST                 
 
             SpeedInterval = trckBr_Speed.Value;
             timer1.Interval = SpeedInterval; //1 seconde de base
@@ -126,11 +126,7 @@ namespace Projet_GameOfLife
             Grid.Step(new Rules());
             Grid.Display();
             pictureBox1.Refresh();
-        }
-        private void btn_previousStep_Click(object sender, EventArgs e)
-        {
-            
-        }
+        }  
         private void btn_RESET_Click(object sender, EventArgs e)
         {
             Grid.ClearDisplay();

@@ -104,7 +104,6 @@
             this.btn_previousStep.TabIndex = 4;
             this.btn_previousStep.Text = "STEP - 1";
             this.btn_previousStep.UseVisualStyleBackColor = false;
-            this.btn_previousStep.Click += new System.EventHandler(this.btn_previousStep_Click);
             // 
             // timer1
             // 
