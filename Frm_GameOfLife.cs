@@ -71,12 +71,15 @@ namespace Projet_GameOfLife
 
         private void Frm_GameOfLife_Load(object sender, EventArgs e)
         {
-            Grid = new Grid(10, 20); //100 row, 100 col
+            Grid = new Grid(100, 100); //100 row, 100 col
 
             // TEST TEST TEST TEST TEST                 
 
-            SpeedInterval = trckBr_Speed.Value;
-            timer1.Interval = SpeedInterval; //1 seconde de base
+            trckBr_Speed.Minimum = 1;
+            trckBr_Speed.Maximum = 60;
+            trckBr_Speed.Value = 2;
+            ApplySpeedFromTrckbr();
+
             pictureBox1.Width = WINDOW_WIDTH - WINDOW_MARGIN;
             pictureBox1.Height = WINDOW_HEIGHT - WINDOW_MARGIN;
             this.Size = new Size(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -198,7 +201,16 @@ namespace Projet_GameOfLife
             Grid.Step(new Rules());
             Grid.Display();
             pictureBox1.Refresh();
-            //insérer le trckbar.value pour modifier en temps réel
+
+            //Contrôleur du taux de rafraichissement
+            ApplySpeedFromTrckbr();
         }
+
+        private void ApplySpeedFromTrckbr() {
+            int genPerSec = trckBr_Speed.Value;
+            int timerTick = Math.Max(1,trckBr_Speed.Maximum - genPerSec); 
+            timer1.Interval = timerTick;
+        }
+
     }
 }

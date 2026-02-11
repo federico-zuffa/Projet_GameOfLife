@@ -37,17 +37,23 @@
             this.btn_previousStep = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.trckBr_Speed = new System.Windows.Forms.TrackBar();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modèlesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.règlesDuJeuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trckBr_Speed)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 30);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1136, 737);
+            this.pictureBox1.Size = new System.Drawing.Size(1136, 719);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
@@ -123,6 +129,42 @@
             this.trckBr_Speed.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trckBr_Speed.Value = 500;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem,
+            this.modèlesToolStripMenuItem,
+            this.règlesDuJeuToolStripMenuItem,
+            this.toolStripMenuItem1});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1160, 24);
+            this.menuStrip1.TabIndex = 6;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // modèlesToolStripMenuItem
+            // 
+            this.modèlesToolStripMenuItem.Name = "modèlesToolStripMenuItem";
+            this.modèlesToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+            this.modèlesToolStripMenuItem.Text = "Modèles";
+            // 
+            // règlesDuJeuToolStripMenuItem
+            // 
+            this.règlesDuJeuToolStripMenuItem.Name = "règlesDuJeuToolStripMenuItem";
+            this.règlesDuJeuToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
+            this.règlesDuJeuToolStripMenuItem.Text = "Règles du Jeu";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(122, 20);
+            // 
             // Frm_GameOfLife
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -134,6 +176,7 @@
             this.Controls.Add(this.btn_Step);
             this.Controls.Add(this.btn_START);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -142,6 +185,8 @@
             this.Load += new System.EventHandler(this.Frm_GameOfLife_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trckBr_Speed)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,6 +201,11 @@
         private System.Windows.Forms.Button btn_previousStep;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TrackBar trckBr_Speed;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem modèlesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem règlesDuJeuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 
