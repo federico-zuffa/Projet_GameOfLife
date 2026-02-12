@@ -34,26 +34,32 @@
             this.btn_START = new System.Windows.Forms.Button();
             this.btn_Step = new System.Windows.Forms.Button();
             this.btn_RESET = new System.Windows.Forms.Button();
-            this.btn_previousStep = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.trckBr_Speed = new System.Windows.Forms.TrackBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.affichageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.afficherGrilleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fernerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modèlesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.règlesDuJeuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lbl_nbStep = new System.Windows.Forms.Label();
+            this.btn_BackToInitialConfig = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trckBr_Speed)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 30);
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1136, 719);
+            this.pictureBox1.Size = new System.Drawing.Size(1146, 642);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
@@ -65,7 +71,7 @@
             this.btn_START.BackColor = System.Drawing.SystemColors.Window;
             this.btn_START.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_START.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn_START.Location = new System.Drawing.Point(445, 699);
+            this.btn_START.Location = new System.Drawing.Point(550, 678);
             this.btn_START.Name = "btn_START";
             this.btn_START.Size = new System.Drawing.Size(121, 38);
             this.btn_START.TabIndex = 1;
@@ -78,7 +84,7 @@
             this.btn_Step.BackColor = System.Drawing.SystemColors.Window;
             this.btn_Step.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Step.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn_Step.Location = new System.Drawing.Point(641, 706);
+            this.btn_Step.Location = new System.Drawing.Point(746, 685);
             this.btn_Step.Name = "btn_Step";
             this.btn_Step.Size = new System.Drawing.Size(63, 25);
             this.btn_Step.TabIndex = 2;
@@ -91,25 +97,13 @@
             this.btn_RESET.BackColor = System.Drawing.SystemColors.Window;
             this.btn_RESET.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_RESET.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn_RESET.Location = new System.Drawing.Point(336, 706);
+            this.btn_RESET.Location = new System.Drawing.Point(441, 685);
             this.btn_RESET.Name = "btn_RESET";
             this.btn_RESET.Size = new System.Drawing.Size(103, 25);
             this.btn_RESET.TabIndex = 3;
-            this.btn_RESET.Text = "RESET";
+            this.btn_RESET.Text = "CLEAR";
             this.btn_RESET.UseVisualStyleBackColor = false;
             this.btn_RESET.Click += new System.EventHandler(this.btn_RESET_Click);
-            // 
-            // btn_previousStep
-            // 
-            this.btn_previousStep.BackColor = System.Drawing.SystemColors.Window;
-            this.btn_previousStep.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_previousStep.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btn_previousStep.Location = new System.Drawing.Point(572, 706);
-            this.btn_previousStep.Name = "btn_previousStep";
-            this.btn_previousStep.Size = new System.Drawing.Size(63, 25);
-            this.btn_previousStep.TabIndex = 4;
-            this.btn_previousStep.Text = "STEP - 1";
-            this.btn_previousStep.UseVisualStyleBackColor = false;
             // 
             // timer1
             // 
@@ -117,9 +111,9 @@
             // 
             // trckBr_Speed
             // 
-            this.trckBr_Speed.BackColor = System.Drawing.SystemColors.ControlText;
+            this.trckBr_Speed.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.trckBr_Speed.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.trckBr_Speed.Location = new System.Drawing.Point(708, 699);
+            this.trckBr_Speed.Location = new System.Drawing.Point(813, 685);
             this.trckBr_Speed.Margin = new System.Windows.Forms.Padding(1);
             this.trckBr_Speed.Maximum = 5000;
             this.trckBr_Speed.Minimum = 100;
@@ -138,15 +132,40 @@
             this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1160, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1175, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // optionsToolStripMenuItem
             // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.affichageToolStripMenuItem,
+            this.fernerToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // affichageToolStripMenuItem
+            // 
+            this.affichageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.afficherGrilleToolStripMenuItem});
+            this.affichageToolStripMenuItem.Name = "affichageToolStripMenuItem";
+            this.affichageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.affichageToolStripMenuItem.Text = "Affichage";
+            // 
+            // afficherGrilleToolStripMenuItem
+            // 
+            this.afficherGrilleToolStripMenuItem.Checked = true;
+            this.afficherGrilleToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.afficherGrilleToolStripMenuItem.Name = "afficherGrilleToolStripMenuItem";
+            this.afficherGrilleToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.afficherGrilleToolStripMenuItem.Text = "Afficher grille";
+            // 
+            // fernerToolStripMenuItem
+            // 
+            this.fernerToolStripMenuItem.Name = "fernerToolStripMenuItem";
+            this.fernerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fernerToolStripMenuItem.Text = "Ferner";
             // 
             // modèlesToolStripMenuItem
             // 
@@ -163,20 +182,56 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(122, 20);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(12, 20);
+            // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Location = new System.Drawing.Point(12, 27);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1152, 648);
+            this.panel1.TabIndex = 7;
+            // 
+            // lbl_nbStep
+            // 
+            this.lbl_nbStep.BackColor = System.Drawing.SystemColors.Control;
+            this.lbl_nbStep.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbl_nbStep.Font = new System.Drawing.Font("Palatino Linotype", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_nbStep.Location = new System.Drawing.Point(341, 685);
+            this.lbl_nbStep.Name = "lbl_nbStep";
+            this.lbl_nbStep.Size = new System.Drawing.Size(94, 23);
+            this.lbl_nbStep.TabIndex = 6;
+            this.lbl_nbStep.Text = "STEPS : 1";
+            this.lbl_nbStep.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btn_BackToInitialConfig
+            // 
+            this.btn_BackToInitialConfig.BackColor = System.Drawing.SystemColors.Window;
+            this.btn_BackToInitialConfig.Font = new System.Drawing.Font("Palatino Linotype", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_BackToInitialConfig.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btn_BackToInitialConfig.Location = new System.Drawing.Point(677, 685);
+            this.btn_BackToInitialConfig.Name = "btn_BackToInitialConfig";
+            this.btn_BackToInitialConfig.Size = new System.Drawing.Size(63, 25);
+            this.btn_BackToInitialConfig.TabIndex = 8;
+            this.btn_BackToInitialConfig.Text = "RESET";
+            this.btn_BackToInitialConfig.UseVisualStyleBackColor = false;
+            this.btn_BackToInitialConfig.Click += new System.EventHandler(this.btn_BackToInitialConfig_Click);
             // 
             // Frm_GameOfLife
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1160, 761);
+            this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.ClientSize = new System.Drawing.Size(1175, 718);
+            this.Controls.Add(this.btn_BackToInitialConfig);
+            this.Controls.Add(this.lbl_nbStep);
             this.Controls.Add(this.trckBr_Speed);
-            this.Controls.Add(this.btn_previousStep);
-            this.Controls.Add(this.btn_RESET);
-            this.Controls.Add(this.btn_Step);
-            this.Controls.Add(this.btn_START);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.btn_Step);
+            this.Controls.Add(this.btn_RESET);
+            this.Controls.Add(this.btn_START);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -187,6 +242,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.trckBr_Speed)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,7 +254,6 @@
         private System.Windows.Forms.Button btn_START;
         private System.Windows.Forms.Button btn_Step;
         private System.Windows.Forms.Button btn_RESET;
-        private System.Windows.Forms.Button btn_previousStep;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TrackBar trckBr_Speed;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -206,6 +261,12 @@
         private System.Windows.Forms.ToolStripMenuItem modèlesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem règlesDuJeuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem affichageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem afficherGrilleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fernerToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lbl_nbStep;
+        private System.Windows.Forms.Button btn_BackToInitialConfig;
     }
 }
 

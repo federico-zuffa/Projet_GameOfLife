@@ -132,6 +132,27 @@ namespace Projet_GameOfLife
             return nbOfNeighbors;
         }
 
+        public bool[,] CopyCurrentState()
+        {
+            bool[,] currentState = new bool[NbRow, NbColumn];
+
+            currentState = (bool[,])Cells.Clone();
+
+            return currentState;
+        }
+
+        public bool[,] PasteInitialState(bool[,] InitialState)
+        {
+            for (int i = 0; i < NbRow; i++)
+            {
+                for (int j = 0; j < NbColumn; j++)
+                {
+                     Cells[i, j] = InitialState[i, j];
+                }
+            }
+            return Cells;
+        }
+
         public void Step(Rules rule)
         {
             int aliveNeighbor;
@@ -151,7 +172,7 @@ namespace Projet_GameOfLife
                 for (int j = 0; j < NbColumn; j++)
                 {
                     Cells[i, j] = NextCells[i, j];
-                    NextCells[i, j] = false; //j'aurais pu resetGrid() aussi mais ça fait faire une double boucle supplémentaire
+                    NextCells[i, j] = false;
                 }
             }
         }
@@ -208,7 +229,8 @@ namespace Projet_GameOfLife
 
         public void Display()
         {
-            DrawGrid();
+            //DrawGrid(); //a commenter si on veut version sans grillage 
+            this.Graphics.Clear(Color.Black);
             DrawCells();
         }
 
