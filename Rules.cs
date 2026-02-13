@@ -27,7 +27,7 @@
 Federico Zuffa
 16.01.2026
 Classe Passerelle
-Projet Game of Life V1
+Projet Game of Life V1.3
 
 */
 using System;
@@ -40,7 +40,7 @@ namespace Projet_GameOfLife
 {
     internal class Rules
     {
-        public bool BasicComputeNextState(bool isAlive, int aliveNeighbors)
+        public bool ClassicComputeNextState(bool isAlive, int aliveNeighbors)
         {
             if (isAlive)
             {
@@ -49,6 +49,17 @@ namespace Projet_GameOfLife
             else
             {
                 return aliveNeighbors == 3;
+            }
+        }
+        public bool HighLifeComputeNextState(bool isAlive, int aliveNeighbors)
+        {
+            if (isAlive)
+            {
+                return aliveNeighbors == 2 || aliveNeighbors == 3;
+            }
+            else
+            {
+                return aliveNeighbors == 3 || aliveNeighbors == 6;
             }
         }
     }

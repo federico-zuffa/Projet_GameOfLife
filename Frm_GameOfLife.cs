@@ -27,7 +27,7 @@
 Federico Zuffa
 16.01.2026
 Classe Passerelle
-Projet Game of Life V1
+Projet Game of Life V1.3
 
 */
 using System;
@@ -53,10 +53,11 @@ namespace Projet_GameOfLife
         private int _lastCol = -1;
         private bool _isMouseDown = false;
         private int _speedInterval;
-        private readonly Rules rules = new Rules();
         private int _nbSteps = 1;
         private bool[,] initialState;
         private Panel _viewportPanel;
+        private string _usedRule = "ClassicRule";
+
 
         internal Grid Grid { get => _grid; set => _grid = value; }
         public int LastRow { get => _lastRow; set => _lastRow = value; }
@@ -64,6 +65,7 @@ namespace Projet_GameOfLife
         public bool IsMouseDown { get => _isMouseDown; set => _isMouseDown = value; }
         public int SpeedInterval { get => _speedInterval; set => _speedInterval = value; }
         public int NbSteps { get => _nbSteps; set => _nbSteps = value; }
+        public string UsedRule { get => _usedRule; set => _usedRule = value; }
 
         public Frm_GameOfLife()
         {
@@ -74,7 +76,8 @@ namespace Projet_GameOfLife
 
         private void Frm_GameOfLife_Load(object sender, EventArgs e)
         {
-            Grid = new Grid(200, 200); //100 row, 100 col
+            Grid = new Grid(144, 256); //100 row, 100 col
+
 
             //Timer et Trackbar           
 
@@ -84,13 +87,13 @@ namespace Projet_GameOfLife
             ApplySpeedFromTrckbr();
 
             //Affichage
-
+            SetupGeneral();
             SetupViewportPanel();
             ApplyZoom(newCellSize: 8);
             // 5) Events souris
-            pictureBox1.MouseDown += pictureBox1_MouseDown;
-            pictureBox1.MouseMove += pictureBox1_MouseMove;
-            pictureBox1.MouseUp += pictureBox1_MouseUp;
+            //pictureBox1.MouseDown += pictureBox1_MouseDown;
+            //pictureBox1.MouseMove += pictureBox1_MouseMove;
+            //pictureBox1.MouseUp += pictureBox1_MouseUp;
 
             // Zoom molette (molette marche mieux sur un control focusable, d’où Focus())
             _viewportPanel.MouseWheel += ViewportPanel_MouseWheel;
@@ -109,32 +112,15 @@ namespace Projet_GameOfLife
             //Grid.SetCellState(3, 2, true);
             //Grid.SetCellState(3, 3, true);
 
-            // TEST HELICE
-
-            //Grid.SetCellState(1, 4, true);
-            //Grid.SetCellState(1, 5, true);
-            //Grid.SetCellState(1, 6, true);
-            //Grid.SetCellState(1, 5, true);
-            //Grid.SetCellState(2, 3, true);
-            //Grid.SetCellState(2, 5, true);
-            //Grid.SetCellState(3, 1, true);
-            //Grid.SetCellState(3, 2, true);
-            //Grid.SetCellState(3, 3, true);
-            //Grid.SetCellState(3, 4, true);
-            //Grid.SetCellState(3, 5, true);
-            //Grid.SetCellState(4, 1, true);
-            //Grid.SetCellState(4, 3, true);
-            //Grid.SetCellState(5, 1, true);
-            //Grid.SetCellState(5, 3, true);
-            //Grid.SetCellState(5, 4, true);
-            //Grid.SetCellState(5, 5, true);
-
-
-
-
-
             Grid.Display();
             pictureBox1.Image = Grid.Bitmap;
+        }
+
+        private void SetupGeneral()
+        {
+            this.ClientSize = new Size(WINDOW_WIDTH + 20, WINDOW_HEIGHT + 100);
+            panel1.Size = new Size(WINDOW_WIDTH, WINDOW_HEIGHT);
+            pictureBox1.Location = new Point(10, 50);
         }
 
         // ========= VIEWPORT (scroll/pan) =========
@@ -193,18 +179,20 @@ namespace Projet_GameOfLife
             {
                 delta = 1;
             }
-            else {
+            else
+            {
                 delta = -1;
             }
-                ApplyZoom(Grid.CellSize + delta);
+            ApplyZoom(Grid.CellSize + delta);
         }
 
         private void btn_Step_Click(object sender, EventArgs e)
         {
-            if (NbSteps == 1) {
+            if (NbSteps == 1)
+            {
                 initialState = Grid.CopyCurrentState();
             }
-            Grid.Step(rules);
+            Grid.Step(UsedRule);
             Grid.Display();
             NbSteps++;
             lbl_nbStep.Text = "STEPS : " + NbSteps.ToString();
@@ -212,9 +200,9 @@ namespace Projet_GameOfLife
         }
         private void btn_RESET_Click(object sender, EventArgs e)
         {
+            NbSteps = 0;
             Grid.ClearDisplay();
             pictureBox1.Refresh();
-            NbSteps = 0;
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -281,7 +269,7 @@ namespace Projet_GameOfLife
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Grid.Step(rules);
+            Grid.Step(UsedRule);
             Grid.Display();
             pictureBox1.Refresh();
             NbSteps++;
@@ -301,7 +289,111 @@ namespace Projet_GameOfLife
 
         private void btn_BackToInitialConfig_Click(object sender, EventArgs e)
         {
+            NbSteps = 0;
             Grid.PasteInitialState(initialState);
+            Grid.Display();
+            pictureBox1.Refresh();
+        }
+
+        private void afficherGrilleToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            Grid.ShowGrid = afficherGrilleToolStripMenuItem.Checked;
+            Grid.Display();
+            pictureBox1.Refresh();
+        }
+
+        private void fernerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Conway's Game of Life \n Version 1.3 \n \n Développé par : Federico Zuffa \n Année : 2026", "Crédits", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void highLifeRulesToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (highLifeRulesToolStripMenuItem.Checked)
+            {
+                règlesOriginalesToolStripMenuItem.Checked = false;
+                UsedRule = "HighLifeRule";
+            }
+        }
+
+        private void règlesOriginalesToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (règlesOriginalesToolStripMenuItem.Checked)
+            {
+                highLifeRulesToolStripMenuItem.Checked = false;
+                UsedRule = "ClassicRule";
+            }
+        }
+
+        private void règlesOriginalesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            règlesOriginalesToolStripMenuItem.Checked = true;
+            highLifeRulesToolStripMenuItem.Checked = !règlesOriginalesToolStripMenuItem.Checked;
+            UsedRule = "ClassicRule";
+        }
+
+        private void highLifeRulesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            highLifeRulesToolStripMenuItem.Checked = true;
+            règlesOriginalesToolStripMenuItem.Checked = !highLifeRulesToolStripMenuItem.Checked;
+            UsedRule = "HighLifeRule";
+        }
+
+        private void gliderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gliderToolStripMenuItem.Checked = true;
+            Grid.ClearDisplay();
+            Grid.Glider();
+            Grid.Display();
+            pictureBox1.Refresh();
+        }
+
+        private void exploderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            exploderToolStripMenuItem.Checked = true;
+            Grid.ClearDisplay();
+            Grid.Exploder();
+            Grid.Display();
+            pictureBox1.Refresh();
+        }
+
+        private void smallExploderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            smallExploderToolStripMenuItem.Checked = true;
+            Grid.ClearDisplay();
+            Grid.SmallExploder();
+            Grid.Display();
+            pictureBox1.Refresh();
+        }
+
+        private void soupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            soupToolStripMenuItem.Checked = true;
+            Grid.ClearDisplay();
+            Grid.Soup();
+            Grid.Display();
+            pictureBox1.Refresh();
+        }
+
+        private void factoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            factoryToolStripMenuItem.Checked = true;
+            Grid.ClearDisplay();
+            Grid.Factory();
+            Grid.Display();
+            pictureBox1.Refresh();
+        }
+
+        private void replicatorhighLifeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            replicatorhighLifeToolStripMenuItem.Checked = true;
+            Grid.ClearDisplay();
+            Grid.Replicator();
             Grid.Display();
             pictureBox1.Refresh();
         }

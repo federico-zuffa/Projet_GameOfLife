@@ -27,7 +27,7 @@
 Federico Zuffa
 16.01.2026
 Classe Passerelle
-Projet Game of Life V1
+Projet Game of Life V1.3
 
 */
 using System;
@@ -51,6 +51,10 @@ namespace Projet_GameOfLife
         private int _cellSize;
         private Bitmap _bitmap;
         private Graphics _graphics;
+        private bool _showGrid;
+        private Rules _rules;
+        private int offsetR;
+        private int offsetC;
 
 
         //Propriétés
@@ -63,6 +67,8 @@ namespace Projet_GameOfLife
         public Bitmap Bitmap { get => _bitmap; set => _bitmap = value; }
         public Graphics Graphics { get => _graphics; set => _graphics = value; }
         public int CellSize { get => _cellSize; set => _cellSize = value; }
+        public bool ShowGrid { get => _showGrid; set => _showGrid = value; }
+        internal Rules Rules { get => _rules; set => _rules = value; }
 
         //Constructeurs
 
@@ -72,6 +78,9 @@ namespace Projet_GameOfLife
             this.NbColumn = nbColumn;
             this.Cells = new bool[nbRow, nbColumn];
             this.NextCells = new bool[nbRow, nbColumn];
+            Rules = new Rules();
+            offsetR = nbRow / 2;
+            offsetC = nbColumn / 2;
             //cellSize ?
         }
 
@@ -147,14 +156,15 @@ namespace Projet_GameOfLife
             {
                 for (int j = 0; j < NbColumn; j++)
                 {
-                     Cells[i, j] = InitialState[i, j];
+                    Cells[i, j] = InitialState[i, j];
                 }
             }
             return Cells;
         }
 
-        public void Step(Rules rule)
+        public void Step(string usedRule)
         {
+
             int aliveNeighbor;
             bool isAlive;
 
@@ -164,7 +174,14 @@ namespace Projet_GameOfLife
                 {
                     aliveNeighbor = CountNeighbors(i, j);
                     isAlive = Cells[i, j];
-                    NextCells[i, j] = rule.BasicComputeNextState(isAlive, aliveNeighbor);
+                    if (usedRule == "ClassicRule")
+                    {
+                        NextCells[i, j] = Rules.ClassicComputeNextState(isAlive, aliveNeighbor);
+                    }
+                    else if (usedRule == "HighLifeRule")
+                    {
+                        NextCells[i, j] = Rules.HighLifeComputeNextState(isAlive, aliveNeighbor);
+                    }
                 }
             }
             for (int i = 0; i < NbRow; i++)
@@ -229,8 +246,11 @@ namespace Projet_GameOfLife
 
         public void Display()
         {
-            //DrawGrid(); //a commenter si on veut version sans grillage 
             this.Graphics.Clear(Color.Black);
+            if (ShowGrid)
+            {
+                DrawGrid();
+            }
             DrawCells();
         }
 
@@ -277,5 +297,126 @@ namespace Projet_GameOfLife
             int[] cellToToggle = GetCellFromPixel(x, y);
             Toggle(cellToToggle[0], cellToToggle[1]);
         }
+
+
+        // Configurations pré-définies
+
+        public void Glider()
+        {
+            SetCellState(1 + offsetR, 2 + offsetC, true);
+            SetCellState(2 + offsetR, 3 + offsetC, true);
+            SetCellState(3 + offsetR, 1 + offsetC, true);
+            SetCellState(3 + offsetR, 2 + offsetC, true);
+            SetCellState(3 + offsetR, 3 + offsetC, true);
+        }
+
+        public void SmallExploder()
+        {
+            SetCellState(1 + offsetR, 2 + offsetC, true);
+            SetCellState(2 + offsetR, 1 + offsetC, true);
+            SetCellState(2 + offsetR, 2 + offsetC, true);
+            SetCellState(2 + offsetR, 3 + offsetC, true);
+            SetCellState(3 + offsetR, 1 + offsetC, true);
+            SetCellState(3 + offsetR, 3 + offsetC, true);
+            SetCellState(4 + offsetR, 2 + offsetC, true);
+        }
+        public void Exploder()
+        {
+            SetCellState(1 + offsetR, 1 + offsetC, true);
+            SetCellState(1 + offsetR, 3 + offsetC, true);
+            SetCellState(1 + offsetR, 5 + offsetC, true);
+            SetCellState(2 + offsetR, 1 + offsetC, true);
+            SetCellState(2 + offsetR, 5 + offsetC, true);
+            SetCellState(3 + offsetR, 1 + offsetC, true);
+            SetCellState(3 + offsetR, 5 + offsetC, true);
+            SetCellState(4 + offsetR, 1 + offsetC, true);
+            SetCellState(4 + offsetR, 5 + offsetC, true);
+            SetCellState(5 + offsetR, 1 + offsetC, true);
+            SetCellState(5 + offsetR, 3 + offsetC, true);
+            SetCellState(5 + offsetR, 5 + offsetC, true);
+        }
+        public void Replicator()
+        {
+            SetCellState(1 + offsetR, 1 + offsetC, true);
+            SetCellState(1 + offsetR, 2 + offsetC, true);
+            SetCellState(2 + offsetR, 1 + offsetC, true);
+            SetCellState(2 + offsetR, 2 + offsetC, true);
+            SetCellState(3 + offsetR, 3 + offsetC, true);
+            SetCellState(3 + offsetR, 4 + offsetC, true);
+            SetCellState(4 + offsetR, 3 + offsetC, true);
+            SetCellState(4 + offsetR, 4 + offsetC, true);
+        }
+
+        public void Factory()
+        {
+            SetCellState(67, 134, true);
+
+            SetCellState(68, 132, true);
+            SetCellState(68, 134, true);
+
+            SetCellState(69, 122, true);
+            SetCellState(69, 123, true);
+            SetCellState(69, 130, true);
+            SetCellState(69, 131, true);
+            SetCellState(69, 144, true);
+            SetCellState(69, 145, true);
+
+            SetCellState(70, 121, true);
+            SetCellState(70, 125, true);
+            SetCellState(70, 130, true);
+            SetCellState(70, 131, true);
+            SetCellState(70, 144, true);
+            SetCellState(70, 145, true);
+
+            SetCellState(71, 110, true);
+            SetCellState(71, 111, true);
+            SetCellState(71, 120, true);
+            SetCellState(71, 126, true);
+            SetCellState(71, 130, true);
+            SetCellState(71, 131, true);
+
+            SetCellState(72, 110, true);
+            SetCellState(72, 111, true);
+            SetCellState(72, 120, true);
+            SetCellState(72, 124, true);
+            SetCellState(72, 126, true);
+            SetCellState(72, 127, true);
+            SetCellState(72, 132, true);
+            SetCellState(72, 134, true);
+
+            SetCellState(73, 120, true);
+            SetCellState(73, 126, true);
+            SetCellState(73, 134, true);
+
+            SetCellState(74, 121, true);
+            SetCellState(74, 125, true);
+
+            SetCellState(75, 122, true);
+            SetCellState(75, 123, true);
+        }
+        public void Soup()
+        {
+            Random rand = new Random();
+            int randomValue;
+            bool isAlive;
+
+            for (int i = 0; i < NbRow / 3; i++)
+            {
+                for (int j = 0; j < NbColumn / 3; j++)
+                {
+                    randomValue = rand.Next(2);
+                    if (randomValue == 0)
+                    {
+                        isAlive = false;
+                    }
+                    else
+                    {
+                        isAlive = true;
+                    }
+                    SetCellState(i + offsetR / 3, j + offsetC / 3, isAlive);
+                }
+            }
+        }
+
     }
 }
