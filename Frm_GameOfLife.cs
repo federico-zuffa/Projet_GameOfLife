@@ -43,6 +43,8 @@ using System.Windows.Forms;
 
 namespace Projet_GameOfLife
 {
+    // Form principal : initialisation UI, connexion entre les controls (pictureBox, timer, menus)
+    // et la logique de la grille.
     public partial class Frm_GameOfLife : Form
     {
         private const int WINDOW_WIDTH = 1152;
@@ -74,43 +76,33 @@ namespace Projet_GameOfLife
         }
 
 
+        // Chargement du formulaire :
+        // - crée la grille,
+        // - configure timer/trackbar,
+        // - prépare le viewport (panel) et le zoom initial,
+        // - initialise le bitmap de la grille et l'affiche.
         private void Frm_GameOfLife_Load(object sender, EventArgs e)
         {
             Grid = new Grid(144, 256); //100 row, 100 col
 
-
-            //Timer et Trackbar           
-
+            // Timer et Trackbar           
             trckBr_Speed.Minimum = 1;
             trckBr_Speed.Maximum = 100;
             trckBr_Speed.Value = 2;
             ApplySpeedFromTrckbr();
 
-            //Affichage
+            // Affichage
             SetupGeneral();
             SetupViewportPanel();
             ApplyZoom(newCellSize: 8);
-            // 5) Events souris
-            //pictureBox1.MouseDown += pictureBox1_MouseDown;
-            //pictureBox1.MouseMove += pictureBox1_MouseMove;
-            //pictureBox1.MouseUp += pictureBox1_MouseUp;
 
-            // Zoom molette (molette marche mieux sur un control focusable, d’où Focus())
+            // Gestion molette (zoom)
             _viewportPanel.MouseWheel += ViewportPanel_MouseWheel;
             _viewportPanel.MouseEnter += (_, __) => _viewportPanel.Focus();
             _viewportPanel.TabStop = true;
 
             Grid.CellSize = Math.Min((int)(pictureBox1.Width / Grid.NbColumn), (int)(pictureBox1.Height / Grid.NbRow));
-
             Grid.InitializeBitMap(pictureBox1.Width, pictureBox1.Height);
-
-            //TEST Planneur
-
-            //Grid.SetCellState(1, 2, true);
-            //Grid.SetCellState(2, 3, true);
-            //Grid.SetCellState(3, 1, true);
-            //Grid.SetCellState(3, 2, true);
-            //Grid.SetCellState(3, 3, true);
 
             Grid.Display();
             pictureBox1.Image = Grid.Bitmap;
@@ -123,25 +115,21 @@ namespace Projet_GameOfLife
             pictureBox1.Location = new Point(10, 50);
         }
 
-        // ========= VIEWPORT (scroll/pan) =========
+        // Crée un panel AutoScroll et y place le pictureBox afin de supporter pan/scroll.
         private void SetupViewportPanel()
         {
-            // Si déjà créé, on ne refait pas
             if (_viewportPanel != null) return;
 
-            // On crée un Panel AutoScroll et on y place pictureBox1
             _viewportPanel = new Panel
             {
                 AutoScroll = true,
                 BorderStyle = BorderStyle.FixedSingle
             };
 
-            // On place le panel là où était pictureBox1
             _viewportPanel.Location = pictureBox1.Location;
             _viewportPanel.Size = pictureBox1.Size;
             _viewportPanel.Anchor = pictureBox1.Anchor;
 
-            // Retire pictureBox1 du Form et l’ajoute dans le panel
             this.Controls.Remove(pictureBox1);
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
@@ -153,10 +141,9 @@ namespace Projet_GameOfLife
             _viewportPanel.BringToFront();
         }
 
-        // ========= ZOOM =========
+        // Applique le zoom en changeant la taille des cellules et en réinitialisant le bitmap.
         private void ApplyZoom(int newCellSize)
         {
-            // Clamp pour éviter un zoom absurde
             newCellSize = Math.Max(2, Math.Min(10, newCellSize));
 
             Grid.CellSize = newCellSize;
@@ -172,6 +159,7 @@ namespace Projet_GameOfLife
             pictureBox1.Image = Grid.Bitmap;
             pictureBox1.Refresh();
         }
+
         private void ViewportPanel_MouseWheel(object sender, MouseEventArgs e)
         {
             int delta = e.Delta;
@@ -186,6 +174,7 @@ namespace Projet_GameOfLife
             ApplyZoom(Grid.CellSize + delta);
         }
 
+        // Avance d'une étape (bouton Step). Sauvegarde de l'état initial la première fois.
         private void btn_Step_Click(object sender, EventArgs e)
         {
             if (NbSteps == 1)
@@ -198,6 +187,7 @@ namespace Projet_GameOfLife
             lbl_nbStep.Text = "STEPS : " + NbSteps.ToString();
             pictureBox1.Refresh();
         }
+
         private void btn_RESET_Click(object sender, EventArgs e)
         {
             NbSteps = 0;
@@ -205,6 +195,7 @@ namespace Projet_GameOfLife
             pictureBox1.Refresh();
         }
 
+        // --- Interaction souris : dessiner / effacer cellules via pictureBox ---
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             IsMouseDown = true;
@@ -225,7 +216,8 @@ namespace Projet_GameOfLife
             LastCol = -1;
         }
 
-
+        // Détecte la cellule sous le curseur et met à jour uniquement si la cellule change
+        // (évite d'écrire continuellement la même cellule).
         private void MouseDraw(MouseEventArgs e)
         {
             if (Grid.IsCellInGrid(e.X, e.Y))
@@ -252,6 +244,7 @@ namespace Projet_GameOfLife
             }
         }
 
+        // Démarre / stoppe le timer de simulation. Sauvegarde l'état initial avant démarrage.
         private void btn_START_Click(object sender, EventArgs e)
         {
             if (btn_START.Text == "START")
@@ -267,6 +260,7 @@ namespace Projet_GameOfLife
             }
         }
 
+        // Tick du timer : avance la simulation et met à jour l'affichage.
         private void timer1_Tick(object sender, EventArgs e)
         {
             Grid.Step(UsedRule);
@@ -275,14 +269,13 @@ namespace Projet_GameOfLife
             NbSteps++;
             lbl_nbStep.Text = "STEPS : " + NbSteps.ToString();
 
-            //Contrôleur du taux de rafraichissement
+            // Contrôle du taux de rafraichissement
             ApplySpeedFromTrckbr();
         }
 
         private void ApplySpeedFromTrckbr()
         {
             int genPerSec = trckBr_Speed.Value;
-            //int timerTick = Math.Max(1,trckBr_Speed.Maximum - genPerSec); 
             int timerTick = Math.Max(1, 1000 / genPerSec);
             timer1.Interval = timerTick;
         }
@@ -295,6 +288,7 @@ namespace Projet_GameOfLife
             pictureBox1.Refresh();
         }
 
+        // Menus : affichage, quitter, crédits, choix des règles et motifs prédéfinis.
         private void afficherGrilleToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             Grid.ShowGrid = afficherGrilleToolStripMenuItem.Checked;
@@ -312,6 +306,7 @@ namespace Projet_GameOfLife
             MessageBox.Show("Conway's Game of Life \n Version 1.3 \n \n Développé par : Federico Zuffa \n Année : 2026", "Crédits", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // Règles
         private void highLifeRulesToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             if (highLifeRulesToolStripMenuItem.Checked)
@@ -344,6 +339,7 @@ namespace Projet_GameOfLife
             UsedRule = "HighLifeRule";
         }
 
+        // Motifs prédéfinis : efface la grille, place le motif via les méthodes Grid.Glider/Exploder/etc.
         private void gliderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             gliderToolStripMenuItem.Checked = true;

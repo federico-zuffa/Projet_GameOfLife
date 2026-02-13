@@ -37,11 +37,11 @@ using System.Windows.Forms;
 
 namespace Projet_GameOfLife
 {
+    // Représente la grille du Game of Life : état des cellules, calcul de la génération suivante
+    // et fonctions de rendu sur un Bitmap.
     internal class Grid
     {
-        //Constantes
-
-        //Champs
+        // Champs
         private int _nbRow;
         private int _nbColumn;
         private bool[,] _cells;
@@ -57,7 +57,7 @@ namespace Projet_GameOfLife
         private int offsetC;
 
 
-        //Propriétés
+        // Propriétés
         public int NbRow { get => _nbRow; set => _nbRow = value; }
         public int NbColumn { get => _nbColumn; set => _nbColumn = value; }
         public bool[,] Cells { get; }
@@ -70,15 +70,19 @@ namespace Projet_GameOfLife
         public bool ShowGrid { get => _showGrid; set => _showGrid = value; }
         internal Rules Rules { get => _rules; set => _rules = value; }
 
-        //Constructeurs
+        // Constructeurs
 
+        //
+        // Initialise une grille de dimensions données et crée les tableaux d'état.
+        // Une instance par défaut de Rules est fournie pour éviter les nulls lors de l'appel à Step.
+        //
         public Grid(int nbRow, int nbColumn)
         {
             this.NbRow = nbRow;
             this.NbColumn = nbColumn;
             this.Cells = new bool[nbRow, nbColumn];
             this.NextCells = new bool[nbRow, nbColumn];
-            Rules = new Rules();
+            this.Rules = new Rules();
             offsetR = nbRow / 2;
             offsetC = nbColumn / 2;
             //cellSize ?
@@ -91,19 +95,27 @@ namespace Projet_GameOfLife
             return Cells[row, col];
         }
 
+        //
+        // Définit l'état d'une cellule.
+        //
         public void SetCellState(int row, int col, bool alive)
         {
             Cells[row, col] = alive;
         }
 
+        //
+        // Inverse l'état d'une cellule.
+        //
         public void Toggle(int row, int col)
         {
             Cells[row, col] = !Cells[row, col];
         }
 
+        //
+        // Remet la grille et le buffer next à faux.
+        //
         public void ResetGrid()
         {
-            //Array.Clear(grid.Cells, 0, NbColumn);
             for (int i = 0; i < NbRow; i++)
             {
                 for (int j = 0; j < NbColumn; j++)
@@ -114,6 +126,8 @@ namespace Projet_GameOfLife
             }
         }
 
+        // Compte les voisins vivants autour de la cellule (row,col).
+        // Grille bornée (non torique) : les voisins hors limites sont ignorés.
         public int CountNeighbors(int row, int col)
         {
             int nbOfNeighbors = 0;
@@ -125,7 +139,7 @@ namespace Projet_GameOfLife
                 for (int dy = -1; dy <= 1; dy++)
                 {
                     if (dx != 0 || dy != 0)
-                    { // ! à modifier si on veut une grille infinie ou thorique
+                    { // ! à modifier si on veut une grille infinie ou torique
                         newRow = row + dx;
                         newCol = col + dy;
                         if (newRow < NbRow && newCol < NbColumn && newRow >= 0 && newCol >= 0)
@@ -141,6 +155,7 @@ namespace Projet_GameOfLife
             return nbOfNeighbors;
         }
 
+        // Retourne une copie du tableau d'état courant (utile pour sauvegarder l'état initial).
         public bool[,] CopyCurrentState()
         {
             bool[,] currentState = new bool[NbRow, NbColumn];
@@ -150,6 +165,7 @@ namespace Projet_GameOfLife
             return currentState;
         }
 
+        // Colle un état initial passé en paramètre dans la grille courante.
         public bool[,] PasteInitialState(bool[,] InitialState)
         {
             for (int i = 0; i < NbRow; i++)
@@ -162,9 +178,11 @@ namespace Projet_GameOfLife
             return Cells;
         }
 
+        // Calcule la génération suivante en utilisant la règle choisie.
+        // usedRule : "ClassicRule" ou "HighLifeRule"
         public void Step(string usedRule)
         {
-
+                    
             int aliveNeighbor;
             bool isAlive;
 
@@ -178,12 +196,12 @@ namespace Projet_GameOfLife
                     {
                         NextCells[i, j] = Rules.ClassicComputeNextState(isAlive, aliveNeighbor);
                     }
-                    else if (usedRule == "HighLifeRule")
-                    {
+                    else if (usedRule == "HighLifeRule") {
                         NextCells[i, j] = Rules.HighLifeComputeNextState(isAlive, aliveNeighbor);
                     }
                 }
             }
+            // Copie le buffer next vers cells et réinitialise next.
             for (int i = 0; i < NbRow; i++)
             {
                 for (int j = 0; j < NbColumn; j++)
@@ -194,14 +212,17 @@ namespace Projet_GameOfLife
             }
         }
 
-        //PARTIE GRAPHIQUE
+        // PARTIE GRAPHIQUE
+        // Méthodes de dessin et conversion pixel <-> cellule.
 
+        // Initialise le bitmap et le Graphics associé utilisés pour dessiner la grille.
         public void InitializeBitMap(int width, int height)
         {
             this.Bitmap = new Bitmap(width, height);
             this.Graphics = Graphics.FromImage(this.Bitmap);
         }
 
+        // Dessine uniquement la grille (lignes) sur le Graphics.
         public void DrawGrid()
         {
             this.Graphics.Clear(Color.Black);
@@ -222,6 +243,7 @@ namespace Projet_GameOfLife
             }
         }
 
+        // Remplit les cellules vivantes sur le bitmap.
         public void DrawCells()
         {
             Brush aliveBrush = Brushes.White;
@@ -244,22 +266,24 @@ namespace Projet_GameOfLife
             }
         }
 
+        // Met à jour le bitmap : efface, dessine la grille (si demandée) puis les cellules.
         public void Display()
         {
             this.Graphics.Clear(Color.Black);
-            if (ShowGrid)
-            {
-                DrawGrid();
+            if (ShowGrid) {
+                DrawGrid(); 
             }
             DrawCells();
         }
 
+        // Réinitialise l'état des cellules et met à jour l'affichage.
         public void ClearDisplay()
         {
             ResetGrid();
             Display();
         }
 
+        // Indique si un point pixel (x,y) appartient à la zone dessinée (évite IndexOutOfRange).
         public bool IsCellInGrid(int x, int y)
         {
             int col = x / CellSize;
@@ -272,6 +296,7 @@ namespace Projet_GameOfLife
             return true;
         }
 
+        // Convertit des coordonnées pixel en indices de cellule. Retourne [-1,-1] si hors grille.
         public int[] GetCellFromPixel(int x, int y)
         {
             int[] cellCoord = new int[2];
@@ -339,12 +364,18 @@ namespace Projet_GameOfLife
         {
             SetCellState(1 + offsetR, 1 + offsetC, true);
             SetCellState(1 + offsetR, 2 + offsetC, true);
+            SetCellState(1 + offsetR, 3 + offsetC, true);
             SetCellState(2 + offsetR, 1 + offsetC, true);
-            SetCellState(2 + offsetR, 2 + offsetC, true);
-            SetCellState(3 + offsetR, 3 + offsetC, true);
-            SetCellState(3 + offsetR, 4 + offsetC, true);
-            SetCellState(4 + offsetR, 3 + offsetC, true);
-            SetCellState(4 + offsetR, 4 + offsetC, true);
+            SetCellState(2 + offsetR, 4 + offsetC, true);
+            SetCellState(3 + offsetR, 1 + offsetC, true);
+            SetCellState(3 + offsetR, 5 + offsetC, true);
+            SetCellState(4 + offsetR, 2 + offsetC, true);
+            SetCellState(4 + offsetR, 5 + offsetC, true);
+            SetCellState(5 + offsetR, 3 + offsetC, true);
+            SetCellState(5 + offsetR, 4 + offsetC, true);
+            SetCellState(5 + offsetR, 5 + offsetC, true);
+
+
         }
 
         public void Factory()
